@@ -3,10 +3,8 @@
 //
 // Author: Daniel Stelle daniel.stelle@oit.edu
 
-//#include "tokens.h"
-#include "cSymbolTable.h"
 #include "lex.h"
-#include "langparse.h"
+//#include "langparse.h"
 
 
 #define RETURN(a) return Return(a);
@@ -20,9 +18,9 @@ static int Return(int val);
 
 
     /* definitions go here */
-punctuation         [\.\,\;\[\]\(\)]
+punctuation         [\.\,\;\[\]\{\}\(\)]
 operators           [+\-*/%=!<]
-identifier         [a-zA-Z_][a-zA-z_0-9]*
+identifier          [a-zA-Z][a-zA-Z0-9_]*
 integer_const       -?[0-9]+
 float_const         -?[0-9]+[\.][0-9]+
 whitespace          [' '\t\n]+
@@ -33,36 +31,39 @@ junk                .
 
     // token definitions go here.
 "if"                        RETURN(IF);
-"then"                      RETURN(THEN);
 "else"                      RETURN(ELSE);
-"for"                       RETURN(FOR);
 "while"                     RETURN(WHILE);
 "print"                     RETURN(PRINT);
 "scan"                      RETURN(SCAN);
-"int"                       RETURN(INT);
-"float"                     RETURN(FLOAT);
 "struct"                    RETURN(STRUCT);
 "return"                    RETURN(RETURN_TOK);
-"char"                      RETURN(CHAR);
-"end"                       RETURN(END);
-"{"                         {
-                                symbolTableRoot->IncreaseScope();
-                                return yytext[0];
-                            }
-"}"                         {
-                                symbolTableRoot->DecreaseScope();
-                                return yytext[0];
-                            }
-{identifier}                {
-                                yylval.symbol = symbolTableRoot->Insert(yytext);
-                                return IDENTIFIER;
-                            }
 {punctuation}               RETURN(yytext[0]);
+{identifier}                {
+                                yylval.symbol = symbolTableRoot->FullLookup(yytext);
+                               
+                                if (yylval.symbol != nullptr)
+                                {
+                                    if(yylval.symbol->IsType())
+                                        RETURN(TYPE_ID);
+                                }
+                                else
+                                {
+                                    yylval.symbol = symbolTableRoot->Insert(yytext);
+                                }
+                                RETURN(IDENTIFIER);
+                            }
+
 {operators}                 RETURN(yytext[0]);
-{integer_const}             RETURN(INT_VAL);
-{float_const}               RETURN(FLOAT_VAL);
-{whitespace}                {};
-{comment}                   {};
+{integer_const}             {
+                                yylval.int_val = atoi(yytext);
+                                RETURN(INT_VAL);
+                            }
+{float_const}               {
+                                yylval.float_val = atof(yytext);
+                                RETURN(FLOAT_VAL);
+                            }
+{whitespace}                //{};
+{comment}                   //{};
 {junk}                      RETURN(JUNK_TOKEN);
 
 %%
@@ -70,6 +71,6 @@ junk                .
 // This function allows us to do extra processing on each token
 static int Return(int val)
 {
-//    printf("Scanned '%s': %d\n", yytext, val);
+    //printf("Scanned '%s': %d\n", yytext, val);
     return val;
 }

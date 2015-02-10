@@ -33,3 +33,5 @@ langparse.c: lang.y
 lang: $(OBJS)
 	g++ $(OBJS) -o lang
 
+langlex.o: langlex.c
+	g++ $(COPTS) -Wno-sign-compare langlex.c -o $@

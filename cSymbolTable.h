@@ -15,7 +15,10 @@ class cSymbolTable
 {
     public:
         cSymbolTable();
-        cSymbol* Insert(string str);
+        cSymbol * Insert(string str);
+        cSymbol * Insert(cSymbol * in);
+        cSymbol * FullLookup(string sym);
+        cSymbol * CurLookup(string sym);
         void IncreaseScope();
         void DecreaseScope();
         ~cSymbolTable();
