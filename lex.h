@@ -23,6 +23,7 @@
 #include "VarPart.h"
 #include "DeclNode.h"
 #include "DeclsNode.h"
+#include "ArrayDecl.h"
 #include "ArraySpec.h"
 #include "ArrayVal.h"
 #include "IfNode.h"
@@ -39,6 +40,7 @@
 #include "ParamSpec.h"
 #include "ParamsNode.h"
 #include "ParamsSpec.h"
+#include "parser.h"
 #include "langparse.h"
 
 extern char *yytext;
@@ -47,3 +49,4 @@ extern cSymbolTable *symbolTableRoot;
 extern FILE *yyin;          // input file for lexer
 extern int yyparse();
 extern int yylex();
+extern int yynerrs;

@@ -2,9 +2,12 @@
 #define FLOATEXPRNODE_H
 
 #include "ExprNode.h"
+#include "DeclNode.h"
 #include <string>
 
 using std::string;
+
+extern cSymbolTable * symbolTableRoot;
 
 class FloatExprNode : public ExprNode
 {
@@ -14,6 +17,10 @@ class FloatExprNode : public ExprNode
         virtual string toString()
         {
             return "(EXPR: " + std::to_string(mValue) + ")";
+        }
+        DeclNode * GetType()
+        {
+            return symbolTableRoot->FullLookup("float")->GetType();
         }
     
     private:

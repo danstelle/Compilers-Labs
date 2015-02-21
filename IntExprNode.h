@@ -6,6 +6,8 @@
 
 using std::string;
 
+extern cSymbolTable * symbolTableRoot;
+
 class IntExprNode : public ExprNode
 {
     public:
@@ -14,6 +16,13 @@ class IntExprNode : public ExprNode
         virtual string toString()
         {
             return "(EXPR: " + std::to_string(mValue) + ")";
+        }
+        DeclNode * GetType()
+        {
+            if (mValue >= -128 && mValue < 128)
+                return symbolTableRoot->FullLookup("char")->GetType();
+            
+            return symbolTableRoot->FullLookup("int")->GetType();
         }
     
     private:

@@ -1,3 +1,14 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: To print the string for showing the 
+ *          values in an array.
+ * 
+ * Constructor: Initializes all the members
+ * 
+ * toString: Returns the string for declaring
+ *           the array.
+ ***********************************************/
 #ifndef ARRAYVAL_H
 #define ARRAYVAL_H
 
@@ -19,7 +30,7 @@ class ArrayVal
             for (it = mVals.begin(); it != mVals.end(); it++)
                 temp += ' ' + (*it)->toString();
                 
-            temp += ")\n";
+            temp += ")";
             
             return temp;
         }

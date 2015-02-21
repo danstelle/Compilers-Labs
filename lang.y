@@ -7,6 +7,7 @@
 
 %{
 #include <iostream>
+#include <map>
 #include "lex.h"
 %}
 
@@ -29,13 +30,12 @@
     VarPart*        var_part;
     ArrayVal*       aval_node;
     StmtNode*       stmt_node;
-    FuncHeader*     func_header;
     FuncCall*       func_call;
-    FuncPrefix*     func_prefix;
     ParamNode*      param_node;
     ParamsNode*     params_node;
     ParamSpec*      param_spec;
     ParamsSpec*     params_spec;
+    std::map<std::string,cSymbol*>* map_node;
     }
 
 %{
@@ -54,20 +54,22 @@
 %token  SCAN PRINT
 %token  WHILE IF ELSE 
 %token  STRUCT
+%token  ARRAY
 %token  RETURN_TOK
 %token  JUNK_TOKEN
 
 %type <ast_node> program
 %type <block_node> block
-%type <sym_table> open
+%type <map_node> open
 %type <sym_table> close
 %type <decls_node> decls
 %type <decl_node> decl
 %type <decl_node> var_decl
 %type <decl_node> struct_decl
+%type <decl_node> array_decl
 %type <decl_node> func_decl
-%type <func_header>  func_header
-%type <func_prefix>  func_prefix
+%type <decl_node>  func_header
+%type <symbol>  func_prefix
 %type <func_call> func_call
 %type <params_spec> paramsspec
 %type <param_spec> paramspec
@@ -97,8 +99,8 @@ program: block                  {
 block:  open decls stmts close  { $$ = new BlockNode($2, $3); }
     |   open stmts close        { $$ = new BlockNode(nullptr, $2); }
 open:   '{'                     {
-                                    symbolTableRoot->IncreaseScope();
-                                    $$ = NULL;
+                                    $$ = symbolTableRoot->IncreaseScope();
+                                    //$$ = NULL;
                                 }
 close:  '}'                     {
                                     symbolTableRoot->DecreaseScope();
@@ -123,31 +125,57 @@ decls:      decls decl          {
 decl:       var_decl ';'        { $$ = $1; }
         |   struct_decl ';'     { $$ = $1; }
         |   func_decl           { $$ = $1; }
-        |   error ';'           {}
-var_decl:   TYPE_ID IDENTIFIER arrayspec    
+        |   array_decl ';'      { $$ = $1; }
+        |   error ';'           { $$ = nullptr; }
+var_decl:   TYPE_ID IDENTIFIER   
                                 {
-                                    $2 = symbolTableRoot->Insert($2->GetName());
-                                    $$ = new VarDecl($1, $2, $3); 
+                                    if (symbolTableRoot->CurLookup($2->GetName()) == nullptr)
+                                    {
+                                        $2 = symbolTableRoot->Insert($2);
+                                        $2->SetType($1->GetType());
+                                        $2->SetDeclared();
+                                        $$ = new VarDecl($1, $2);
+                                    }
+                                    else
+                                    {
+                                        semantic_error("Symbol " + $2->GetName() + " already defined in current scope");
+                                        YYERROR;
+                                    }
                                 }
-        |   struct_decl IDENTIFIER arrayspec
-                                {}
+array_decl: ARRAY TYPE_ID IDENTIFIER arrayspec
+                                {
+                                    $3 = symbolTableRoot->Insert($3);
+                                    $3->MakeType();
+                                    $3->SetDeclared();
+                                    $$ = new ArrayDecl($2, $3, $4);
+                                }
 struct_decl:  STRUCT open decls close IDENTIFIER    
                                 {
-                                    $5->MakeType();
-                                    $$ = new StructDecl($3, $5);
+                                    //First off $5 may be in the right symbol table but it might not be
+                                    $5 = symbolTableRoot->Insert($5); //This ensures its in the current symbol table
+                                    $5->MakeType(); //This sets it to a type
+                                    $5->SetDeclared();
+                                    
+                                    $$ = new StructDecl($2, $3, $5); //Currently your struct decl doesn't know what symbols it holds this needs to change
+                                    
+                                    $5->SetType($$); //THis adds the struct decl to the csymbol
                                 }
 func_decl:  func_header ';'     { 
-                                    $$ = new FuncDecl($1, nullptr, nullptr);
+                                    $$ = $1;
                                     symbolTableRoot->DecreaseScope();
                                 }
         |   func_header  '{' decls stmts '}'
                                 {
-                                    $$ = new FuncDecl($1, $3, $4);
+                                    $$ = $1;
+                                    FuncHeader * node = dynamic_cast<FuncHeader*>($1);
+                                    node->SetParts($3, $4);
                                     symbolTableRoot->DecreaseScope();
                                 }
         |   func_header  '{' stmts '}'
                                 {
-                                    $$ = new FuncDecl($1, nullptr, $3);
+                                    $$ = $1;
+                                    FuncHeader * node = dynamic_cast<FuncHeader*>($1);
+                                    node->SetParts(nullptr, $3);
                                     symbolTableRoot->DecreaseScope();
                                 }
                                 
@@ -157,8 +185,10 @@ func_header: func_prefix paramsspec ')'
         
 func_prefix: TYPE_ID IDENTIFIER '('
                                 {
+                                    $$ = symbolTableRoot->Insert($2);
+                                    $$->SetType($1->GetType());
+                                    $2->SetDeclared();
                                     symbolTableRoot->IncreaseScope();
-                                    $$ = new FuncPrefix($1, $2);
                                 }
                                 
 paramsspec:     
@@ -206,7 +236,15 @@ stmt:       IF '(' expr ')' stmt
                                 { $$ = new PrintNode($3); }
         |   SCAN '(' lval ')' ';'
                                 { $$ = new ScanNode($3); }
-        |   lval '=' expr ';'   { $$ = new AssignNode((VarRef*)$1, $3); }
+        |   lval '=' expr ';'   {
+                                    $$ = new AssignNode((VarRef*)$1, $3);
+                                    
+                                    if ($$->SemanticError())
+                                    {
+                                        semantic_error($$->GetErrorMessage());
+                                        $$ = nullptr;
+                                    }
+                                }
         |   func_call ';'       { $$ = $1; }
         |   block               { $$ = $1; }
         |   RETURN_TOK expr ';' { $$ = new ReturnNode($2); }
@@ -219,13 +257,24 @@ varref:   varref '.' varpart    {
                                         $1 = new VarRef();
                                     $$ = $1;
                                     $$->AddNode($3);
+                                    if($$->SemanticError())
+                                    {
+                                        semantic_error($$->GetErrorMessage());
+                                    }
                                 }
         | varpart               { 
                                     $$ = new VarRef();
                                     $$->AddNode($1);
+                                    if($$->SemanticError())
+                                    {
+                                        semantic_error($$->GetErrorMessage());
+                                    }
                                 }
 
-varpart:  IDENTIFIER arrayval   { $$ = new VarPart($1, $2); }
+varpart:  IDENTIFIER arrayval   {
+                                    
+                                    $$ = new VarPart($1, $2);
+                                }
 
 lval:     varref                { $$ = $1; }
 
@@ -274,4 +323,11 @@ int yyerror(const char *msg)
         << yytext << "\' on line " << yylineno << "\n";
 
     return 0;
+}
+
+void semantic_error(std::string msg)
+{
+    std::cout << "ERROR: " << msg << " on line " << yylineno << std::endl;
+    
+    yynerrs++;
 }

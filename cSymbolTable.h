@@ -6,6 +6,7 @@
 #include <map>
 #include <string>
 #include "cSymbol.h"
+#include "BaseDeclNode.h"
 
 using std::list;
 using std::map;
@@ -19,7 +20,7 @@ class cSymbolTable
         cSymbol * Insert(cSymbol * in);
         cSymbol * FullLookup(string sym);
         cSymbol * CurLookup(string sym);
-        void IncreaseScope();
+        map<string,cSymbol*>* IncreaseScope();
         void DecreaseScope();
         ~cSymbolTable();
     

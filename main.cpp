@@ -56,7 +56,7 @@ int main(int argc, char **argv)
         {
             output << yyast_root->toString() << std::endl;
         } else {
-            output << "Errors in compile\n";
+            output << std::to_string(yynerrs) + " Errors in compile\n";
             //return result;
         }
     }

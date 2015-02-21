@@ -16,6 +16,10 @@ class FuncCall : public StmtNode, public ExprNode
         {
             return "(FUNC CALL: " + mID->toString() + mParameters->toString() + ")\n";
         }
+        DeclNode * GetType()
+        {
+            return mID->GetType();
+        }
     
     private:
         cSymbol * mID;

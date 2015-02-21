@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * See .h file for purposes
+ ***********************************************/
 #include "cSymbol.h"
 
 int cSymbol::symbolCount = 0;
@@ -21,6 +26,16 @@ string cSymbol::GetName()
     return mSym;
 }
 
+DeclNode * cSymbol::GetType()
+{
+    return mDecl;
+}
+
+void cSymbol::SetType(DeclNode * type)
+{
+    mDecl = type;
+}
+
 bool cSymbol::IsType()
 {
     return mIsType;
@@ -29,6 +44,16 @@ bool cSymbol::IsType()
 void cSymbol::MakeType()
 {
     mIsType = true;
+}
+
+void cSymbol::SetDeclared()
+{
+    mIsDeclared = true;
+}
+
+bool cSymbol::GetDeclared()
+{
+    return mIsDeclared;
 }
 
 cSymbol::~cSymbol()

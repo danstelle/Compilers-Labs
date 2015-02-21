@@ -1,3 +1,14 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: To print the string for all of the
+ *          arrays.
+ * 
+ * Constructor: Initializes all the members
+ * 
+ * toString: Returns the string for declaring
+ *           the arrays.
+ ***********************************************/
 #ifndef ARRAYSPEC_H
 #define ARRAYSPEC_H
 
@@ -18,7 +29,7 @@ class ArraySpec
             for (it = mArray.begin(); it != mArray.end(); it++)
                 temp += std::to_string(*it) + ' ';
                 
-            temp += ")\n";
+            temp += ")";
             
             return temp;
         }

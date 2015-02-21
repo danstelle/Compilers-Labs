@@ -1,13 +1,47 @@
 #ifndef DECLNODE_H
 #define DECLNODE_H
 
+#include "cAstNode.h"
 #include <string>
 
 using std::string;
 
-class DeclNode
+class DeclNode : public cAstNode
 {
     public:
-        virtual string toString() = 0;
+        //virtual string toString() = 0;
+        virtual bool IsType()
+        {
+            return false;
+        }
+        virtual bool IsFunc()
+        {
+            return false;
+        }
+        virtual bool IsArray()
+        {
+            return false;
+        }
+        virtual bool IsFloat()
+        {
+            return false;
+        }
+        virtual bool IsInt()
+        {
+            return false;
+        }
+        virtual bool IsChar()
+        {
+            return false;
+        }
+        virtual bool IsStruct()
+        {
+            return false;
+        }
+        virtual int GetSize() = 0;
+        //bool CompatibleWith(cDeclNode *right)
+        //{
+            
+        //}
 };
 #endif

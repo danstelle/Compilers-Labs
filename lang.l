@@ -37,6 +37,7 @@ junk                .
 "scan"                      RETURN(SCAN);
 "struct"                    RETURN(STRUCT);
 "return"                    RETURN(RETURN_TOK);
+"array"                     RETURN(ARRAY);
 {punctuation}               RETURN(yytext[0]);
 {identifier}                {
                                 yylval.symbol = symbolTableRoot->FullLookup(yytext);
@@ -48,8 +49,9 @@ junk                .
                                 }
                                 else
                                 {
-                                    yylval.symbol = symbolTableRoot->Insert(yytext);
+                                    yylval.symbol = new cSymbol(yytext);
                                 }
+                                
                                 RETURN(IDENTIFIER);
                             }
 

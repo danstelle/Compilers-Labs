@@ -11,6 +11,10 @@ cSymbolTable::cSymbolTable()
     Insert(character);
     Insert(integer);
     Insert(floating);
+    
+    character->SetType(new BaseDeclNode(1, false));
+    integer->SetType(new BaseDeclNode(4, false));
+    floating->SetType(new BaseDeclNode(8, true));
 }
 
 cSymbol * cSymbolTable::Insert(string in)
@@ -44,6 +48,7 @@ cSymbol * cSymbolTable::Insert(cSymbol * in)
 cSymbol * cSymbolTable::FullLookup(string sym)
 {
     list<map<string,cSymbol*>*>::iterator it;
+    
     for(it = mScope.begin(); it != mScope.end(); ++it)
     {
         map<string,cSymbol*>::iterator symbol = (*it)->find(sym);
@@ -56,7 +61,7 @@ cSymbol * cSymbolTable::FullLookup(string sym)
 
 cSymbol * cSymbolTable::CurLookup(string sym)
 {
-    map <string, cSymbol *>::const_iterator it = mScope.front()->find(sym);
+    map<string, cSymbol *>::const_iterator it = mScope.front()->find(sym);
     
     if (it == mScope.front()->end())
         return nullptr;
@@ -64,10 +69,11 @@ cSymbol * cSymbolTable::CurLookup(string sym)
         return it->second;
 }
 
-void cSymbolTable::IncreaseScope()
+map<string,cSymbol*>* cSymbolTable::IncreaseScope()
 {
-    map <string, cSymbol *> * newTable = new map<string,cSymbol*>();
+    map<string, cSymbol*>* newTable = new map<string,cSymbol*>();
     mScope.push_front(newTable);
+    return newTable;
 }
 
 void cSymbolTable::DecreaseScope()

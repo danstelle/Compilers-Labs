@@ -3,15 +3,18 @@
 
 #include "FuncPrefix.h"
 #include "ParamsSpec.h"
+#include "DeclsNode.h"
+#include "DeclNode.h"
+#include "StmtsNode.h"
 #include <string>
 
 using std::string;
 
-class FuncHeader
+class FuncHeader : public DeclNode
 {
     public:
-        FuncHeader(FuncPrefix * prefix, ParamsSpec * parameters)
-            : mPrefix(prefix), mParameters(parameters)
+        FuncHeader(cSymbol * sym, ParamsSpec * parameters)
+            : mPrefix(sym), mParameters(parameters)
         {}
         virtual string toString()
         {
@@ -24,9 +27,20 @@ class FuncHeader
                 
             return temp;
         }
+        void SetParts(DeclsNode * decls, StmtsNode * stmts)
+        {
+            mStmts = stmts;
+            mDecls = decls;
+        }
+        int GetSize()
+        {
+            return -51;
+        }
     
     private:
-        FuncPrefix * mPrefix;
+        cSymbol * mPrefix;
         ParamsSpec * mParameters;
+        StmtsNode * mStmts;
+        DeclsNode * mDecls;
 };
 #endif
