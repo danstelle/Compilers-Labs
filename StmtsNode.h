@@ -1,6 +1,10 @@
 #ifndef STMTSNODE_H
 #define STMTSNODE_H
-
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Holds a list of stmt nodes
+ ***********************************************/
 #include <list>
 #include <string>
 #include "StmtNode.h"

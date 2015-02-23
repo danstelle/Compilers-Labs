@@ -1,3 +1,9 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Statement node that manages return
+ *          statments in functions
+ ***********************************************/
 #ifndef RETURNNODE_H
 #define RETURNNODE_H
 

@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Function definitions for cSymbolTable
+ ***********************************************/
 #include "cSymbolTable.h"
 
 cSymbolTable::cSymbolTable()
@@ -12,25 +17,37 @@ cSymbolTable::cSymbolTable()
     Insert(integer);
     Insert(floating);
     
-    character->SetType(new BaseDeclNode(1, false));
-    integer->SetType(new BaseDeclNode(4, false));
-    floating->SetType(new BaseDeclNode(8, true));
+    character->SetType(new BaseDeclNode(character, 1, false));
+    integer->SetType(new BaseDeclNode(integer, 4, false));
+    floating->SetType(new BaseDeclNode(floating, 8, true));
 }
 
 cSymbol * cSymbolTable::Insert(string in)
 {
-    cSymbol *retVal;
-    map<string,cSymbol*>::iterator it = mScope.front()->find(in);
+    cSymbol * temp = CurLookup(in);
     
-    if(it != mScope.front()->end())
-        retVal = it->second;
+    if (temp != nullptr)
+        return temp;
     else
     {
-        retVal = new cSymbol(in);
-        mScope.front()->insert(std::pair<string, cSymbol*>(in, retVal));
+        temp = new cSymbol(in);
+        mScope.front()->insert(std::pair<string, cSymbol*>(in, temp));
+        
+        return temp;
     }
     
-    return retVal;
+    //cSymbol * retVal;
+    // map<string,cSymbol*>::iterator it = mScope.front()->find(in);
+    
+    // if(it != mScope.front()->end())
+    //     retVal = it->second;
+    // else
+    // {
+    //     retVal = new cSymbol(in);
+    //     mScope.front()->insert(std::pair<string, cSymbol*>(in, retVal));
+    // }
+    
+    // return retVal;
 }
 
 cSymbol * cSymbolTable::Insert(cSymbol * in)
@@ -38,9 +55,13 @@ cSymbol * cSymbolTable::Insert(cSymbol * in)
     map<string,cSymbol*>::iterator it = mScope.front()->find(in->GetName());
     
     if(it != mScope.front()->end())
+    {
         in = it->second;
+    }
     else
+    {
         mScope.front()->insert(std::pair<string, cSymbol*>(in->GetName(), in));
+    }
     
     return in;
 }

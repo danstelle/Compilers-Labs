@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Properties of a function declaration
+ ***********************************************/
 #ifndef FUNCDECL_H
 #define FUNCDECL_H
 

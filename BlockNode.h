@@ -3,11 +3,6 @@
  *  
  * Purpose: To print the string for declaring a
  *          block.
- * 
- * Constructor: Initializes all the members
- * 
- * toString: Returns the string for declaring
- *           the block.
  ***********************************************/
 #ifndef BLOCKNODE_H
 #define BLOCKNODE_H

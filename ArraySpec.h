@@ -3,11 +3,6 @@
  *  
  * Purpose: To print the string for all of the
  *          arrays.
- * 
- * Constructor: Initializes all the members
- * 
- * toString: Returns the string for declaring
- *           the arrays.
  ***********************************************/
 #ifndef ARRAYSPEC_H
 #define ARRAYSPEC_H

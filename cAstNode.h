@@ -18,7 +18,7 @@ class cAstNode
         virtual string toString() = 0;
         virtual bool SemanticError()
         {
-            return mIsValid;
+            return mIsError;
         }
         virtual string GetErrorMessage()
         {
@@ -26,7 +26,7 @@ class cAstNode
         }
         
     protected:
-        bool mIsValid;
+        bool mIsError;
         string mErrorMsg;
 };
 #endif

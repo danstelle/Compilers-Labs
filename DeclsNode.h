@@ -2,6 +2,11 @@
 #define DECLSNODE_H
 
 
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Holds a list of decl nodes
+ ***********************************************/
 #include "DeclNode.h"
 #include <string>
 

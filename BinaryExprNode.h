@@ -3,11 +3,6 @@
  *  
  * Purpose: To print the string for declaring a
  *          binary expression.
- * 
- * Constructor: Initializes all the members
- * 
- * toString: Returns the string for declaring
- *           the binary expression.
  ***********************************************/
 #ifndef BINARYEXPRNODE_H
 #define BINARYEXPRNODE_H
@@ -46,6 +41,10 @@ class BinaryExprNode : public ExprNode
                 else
                     return left; // Both are chars so return either of them
             }
+        }
+        string GetName()
+        {
+            return "";
         }
     
     private:

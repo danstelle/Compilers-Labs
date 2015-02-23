@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Statment node that manages if statements
+ ***********************************************/
 #ifndef IFNODE_H
 #define IFNODE_H
 

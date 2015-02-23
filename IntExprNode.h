@@ -1,3 +1,9 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Expression node that manages integer
+ *          types./
+ ***********************************************/
 #ifndef INTEXPRNODE_H
 #define INTEXPRNODE_H
 
@@ -23,6 +29,10 @@ class IntExprNode : public ExprNode
                 return symbolTableRoot->FullLookup("char")->GetType();
             
             return symbolTableRoot->FullLookup("int")->GetType();
+        }
+        string GetName()
+        {
+            return "int";
         }
     
     private:

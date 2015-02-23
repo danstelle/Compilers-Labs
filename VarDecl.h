@@ -2,6 +2,12 @@
 #define VARDECL_H
 
 #include "DeclNode.h"
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Decl node that manages variable
+ *          declarations
+ ***********************************************/
 #include "cSymbol.h"
 #include <string>
 
@@ -20,6 +26,10 @@ class VarDecl : public DeclNode
         int GetSize()
         {
             return -90;
+        }
+        string GetName()
+        {
+            return mType->GetName();
         }
         
     private:

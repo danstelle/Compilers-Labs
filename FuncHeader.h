@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Properties of a function header
+ ***********************************************/
 #ifndef FUNCHEADER_H
 #define FUNCHEADER_H
 
@@ -35,6 +40,10 @@ class FuncHeader : public DeclNode
         int GetSize()
         {
             return -51;
+        }
+        string GetName()
+        {
+            return mPrefix->GetName();
         }
     
     private:

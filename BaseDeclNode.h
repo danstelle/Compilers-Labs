@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: The base node for most decl nodes
+ ***********************************************/
 #ifndef BASEDECLNODE_H
 #define BASEDECLNODE_H
 
@@ -7,7 +12,8 @@
 class BaseDeclNode : public DeclNode
 {
     public:
-        BaseDeclNode(int size, bool isFloat) : mSize(size), mIsFloat(isFloat)
+        BaseDeclNode(cSymbol * sym, int size, bool isFloat)
+            : mSym(sym), mSize(size), mIsFloat(isFloat)
         {}
         virtual string toString()
         {
@@ -29,9 +35,14 @@ class BaseDeclNode : public DeclNode
         {
             return mSize;
         }
+        string GetName()
+        {
+            return mSym->GetName();
+        }
         
     protected:
         int mSize;
         bool mIsFloat;
+        cSymbol * mSym;
 };
 #endif

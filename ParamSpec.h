@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Specification for parameters
+ ***********************************************/
 #ifndef PARAMSPEC_H
 #define PARAMSPEC_H
 

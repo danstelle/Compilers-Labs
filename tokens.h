@@ -1,3 +1,9 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Holds the code values for all of the
+ *          tokens that the scanner can read
+ ***********************************************/
 #ifndef _TOKEN_H
 #define _TOKEN_H
 

@@ -3,10 +3,6 @@
  *  
  * Purpose: To handle the different symbols that
  *          lang.l finds.
- * 
- * Constructor: Initializes all the members
- * 
- * toString: 
  ***********************************************/
 #ifndef CSYMBOL_H
 #define CSYMBOL_H
@@ -20,7 +16,7 @@ class cSymbol
 {
     public:
         cSymbol(string sym, bool isType = false);
-        virtual string toString();
+        string toString();
         int GetSymCount();
         string GetName();
         DeclNode * GetType();

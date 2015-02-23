@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Manages the various symbol tables
+ ***********************************************/
 #ifndef CSYMBOLTABLE_H
 #define CSYMBOLTABLE_H
 

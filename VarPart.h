@@ -1,9 +1,16 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Manages each piece of a variable declaration
+ *          and is a piece of structs
+ ***********************************************/
 #ifndef VARPART_H
 #define VARPART_H
 
 #include "ExprNode.h"
 #include "cSymbol.h"
 #include "ArrayVal.h"
+#include "ArrayDecl.h"
 
 extern cSymbolTable * symbolTableRoot;
 
@@ -24,7 +31,10 @@ class VarPart : public ExprNode
         }
         DeclNode * GetType()
         {
-            return mSym->GetType();
+            if (HasIndecies())
+                return static_cast<ArrayDecl*>(mSym->GetType())->GetType();
+            else
+                return mSym->GetType();
         }
         cSymbol * GetSym()
         {
@@ -34,51 +44,20 @@ class VarPart : public ExprNode
         {
             mSym = sym;
         }
+        string GetName()
+        {
+            return mSym->GetName();
+        }
+        bool HasIndecies()
+        {
+            if (mArray == nullptr)
+                return false; // Does not have indecies
+            else
+                return true; // Has indecies
+        }
     
     private:
         cSymbol * mSym;
         ArrayVal * mArray;
 };
 #endif
-// #ifndef VARPART_H
-// #define VARPART_H
-
-// #include "ExprNode.h"
-// #include "cSymbol.h"
-// #include "ArrayVal.h"
-
-// extern cSymbolTable * symbolTableRoot;
-
-// class VarPart : public ExprNode
-// {
-//     public:
-//         VarPart(cSymbol * sym, ArrayVal * ary)
-//             : mSym(sym), mArray(ary)
-//         {}
-//         virtual string toString()
-//         {
-//             string temp = mSym->toString();
-            
-//             if (mArray != nullptr)
-//                 temp += '[' + mArray->toString() + ']';
-                
-//             return temp;
-//         }
-//         DeclNode * GetType()
-//         {
-//             return mSym->GetType();
-//         }
-//         cSymbol * GetSym()
-//         {
-//             return mSym;
-//         }
-//         void SetSym(cSymbol * sym)
-//         {
-//             mSym = sym;
-//         }
-    
-//     private:
-//         cSymbol * mSym;
-//         ArrayVal * mArray;
-// };
-// #endif

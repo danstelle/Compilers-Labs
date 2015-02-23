@@ -1,7 +1,7 @@
 /***********************************************
  * Author: Daniel Stelle
  *  
- * See .h file for purposes
+ * Purpose: Function definitions for cSymbol
  ***********************************************/
 #include "cSymbol.h"
 

@@ -1,3 +1,9 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Holds the list of parameters for a
+ *          function
+ ***********************************************/
 #ifndef PARAMSNODE_H
 #define PARAMSNODE_H
 

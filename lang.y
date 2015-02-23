@@ -96,12 +96,13 @@ program: block                  {
                                     else
                                         YYABORT;
                                 }
+                                
 block:  open decls stmts close  { $$ = new BlockNode($2, $3); }
+
     |   open stmts close        { $$ = new BlockNode(nullptr, $2); }
-open:   '{'                     {
-                                    $$ = symbolTableRoot->IncreaseScope();
-                                    //$$ = NULL;
-                                }
+    
+open:   '{'                     { $$ = symbolTableRoot->IncreaseScope(); }
+
 close:  '}'                     {
                                     symbolTableRoot->DecreaseScope();
                                     $$ = NULL;
@@ -127,6 +128,7 @@ decl:       var_decl ';'        { $$ = $1; }
         |   func_decl           { $$ = $1; }
         |   array_decl ';'      { $$ = $1; }
         |   error ';'           { $$ = nullptr; }
+        
 var_decl:   TYPE_ID IDENTIFIER   
                                 {
                                     if (symbolTableRoot->CurLookup($2->GetName()) == nullptr)
@@ -142,24 +144,27 @@ var_decl:   TYPE_ID IDENTIFIER
                                         YYERROR;
                                     }
                                 }
+                                
 array_decl: ARRAY TYPE_ID IDENTIFIER arrayspec
                                 {
                                     $3 = symbolTableRoot->Insert($3);
                                     $3->MakeType();
                                     $3->SetDeclared();
                                     $$ = new ArrayDecl($2, $3, $4);
+                                    $3->SetType($$);
                                 }
+                                
 struct_decl:  STRUCT open decls close IDENTIFIER    
                                 {
-                                    //First off $5 may be in the right symbol table but it might not be
-                                    $5 = symbolTableRoot->Insert($5); //This ensures its in the current symbol table
-                                    $5->MakeType(); //This sets it to a type
+                                    $5 = symbolTableRoot->Insert($5);
+                                    $5->MakeType();
                                     $5->SetDeclared();
                                     
-                                    $$ = new StructDecl($2, $3, $5); //Currently your struct decl doesn't know what symbols it holds this needs to change
+                                    $$ = new StructDecl($2, $3, $5);
                                     
-                                    $5->SetType($$); //THis adds the struct decl to the csymbol
+                                    $5->SetType($$);
                                 }
+                                
 func_decl:  func_header ';'     { 
                                     $$ = $1;
                                     symbolTableRoot->DecreaseScope();
@@ -196,6 +201,7 @@ paramsspec:
                                 {
                                     if ($1 == nullptr)
                                         $1 = new ParamsSpec();
+                                        
                                     $$ = $1;
                                     $$->AddNode($3);
                                 }
@@ -210,14 +216,16 @@ arrayspec:  arrayspec '[' INT_VAL ']'
                                 {
                                     if ($1 == nullptr)
                                         $1 = new ArraySpec();
+                                        
                                     $$ = $1;
                                     $$->AddNode($3);
                                 }
         |   /* empty */         { $$ = NULL; }
 
 stmts:      stmts stmt          {
-                                    if($1 == nullptr)
+                                    if ($1 == nullptr)
                                         $1 = new StmtsNode();
+                                        
                                     $$ = $1;
                                     $$->AddNode($2);
                                 }
@@ -251,29 +259,38 @@ stmt:       IF '(' expr ')' stmt
         |   error ';'           {}
 
 func_call:  IDENTIFIER '(' params ')' 
-                                { $$ = new FuncCall($1, $3); }
+                                {
+                                    
+                                    $1 = symbolTableRoot->Insert($1);
+                                    $$ = new FuncCall($1, $3); 
+                                }
 varref:   varref '.' varpart    { 
                                     if ($1 == nullptr)
                                         $1 = new VarRef();
+                                        
                                     $$ = $1;
                                     $$->AddNode($3);
-                                    if($$->SemanticError())
+                                    
+                                    if ($$->SemanticError())
                                     {
                                         semantic_error($$->GetErrorMessage());
+                                        YYERROR;
                                     }
                                 }
         | varpart               { 
                                     $$ = new VarRef();
                                     $$->AddNode($1);
-                                    if($$->SemanticError())
-                                    {
+                                    
+                                    if ($$->SemanticError())
                                         semantic_error($$->GetErrorMessage());
-                                    }
                                 }
 
-varpart:  IDENTIFIER arrayval   {
-                                    
-                                    $$ = new VarPart($1, $2);
+varpart:  IDENTIFIER arrayval   { 
+                                    /*if(!$1->GetDeclared())
+                                        $1 = symbolTableRoot->FullLookup($1->GetName());
+                                    else*/
+                                        $1 = symbolTableRoot->Insert($1);
+                                    $$ = new VarPart($1, $2); 
                                 }
 
 lval:     varref                { $$ = $1; }
@@ -281,6 +298,7 @@ lval:     varref                { $$ = $1; }
 arrayval: arrayval '[' expr ']' {
                                     if ($1 == nullptr)
                                         $1 = new ArrayVal();
+                                        
                                     $$ = $1;
                                     $$->AddNode($3);
                                 }
@@ -289,6 +307,7 @@ arrayval: arrayval '[' expr ']' {
 params:     params',' param     {
                                     if ($1 == nullptr)
                                         $1 = new ParamsNode();
+                                        
                                     $$ = $1;
                                     $$->AddNode($3);
                                 }

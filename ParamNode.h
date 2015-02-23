@@ -1,3 +1,9 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Properties of a parameter for a
+ *          function
+ ***********************************************/
 #ifndef PARAMNODE_H
 #define PARAMNODE_H
 

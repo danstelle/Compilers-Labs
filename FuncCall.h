@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Properties of a function call
+ ***********************************************/
 #ifndef FUNCCALL_H
 #define FUNCCALL_H
 
@@ -19,6 +24,10 @@ class FuncCall : public StmtNode, public ExprNode
         DeclNode * GetType()
         {
             return mID->GetType();
+        }
+        string GetName()
+        {
+            return mID->GetName();
         }
     
     private:

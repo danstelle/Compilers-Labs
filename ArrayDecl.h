@@ -3,11 +3,6 @@
  *  
  * Purpose: To print the string for declaring an
  *          array.
- * 
- * Constructor: Initializes all the members
- * 
- * toString: Returns the string for declaring
- *           the array.
  ***********************************************/
 #ifndef ARRAYDECL_H
 #define ARRAYDECL_H
@@ -29,6 +24,14 @@ class ArrayDecl : public DeclNode
         int GetSize()
         {
             return -17;
+        }
+        string GetName()
+        {
+            return mSym->GetName();
+        }
+        DeclNode * GetType()
+        {
+            return mType->GetType();
         }
     
     private:

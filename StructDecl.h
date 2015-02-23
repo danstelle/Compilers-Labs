@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Decl node that manages structs
+ ***********************************************/
 #ifndef STRUCTDECL_H
 #define STRUCTDECL_H
 
@@ -23,19 +28,26 @@ class StructDecl : public DeclNode
         }
         cSymbol* Find(string symbol)
         {
-            cSymbol* sym = nullptr;
-           
-            if(mSymbols != nullptr)
+            if (mSymbols != nullptr)
             {
                 map<string,cSymbol*>::iterator it = mSymbols->find(symbol);
-                if(it != mSymbols->end())
-                    sym = it->second;
+                
+                if (it != mSymbols->end())
+                {
+                    //std::cout << "Thing: " << it->second->GetName() << std::endl;
+                    return it->second;
+                }
             }
-            return sym;
+            
+            return nullptr;
         }
         bool IsStruct()
         {
             return true;
+        }
+        string GetName()
+        {
+            return mID->GetName();
         }
     
     private:

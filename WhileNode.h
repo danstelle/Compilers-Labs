@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: StmtNode that manages while loops
+ ***********************************************/
 #ifndef WHILENODE_H
 #define WHILENODE_H
 

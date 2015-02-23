@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Properties of the prefix for a function
+ ***********************************************/
 #ifndef FUNCPREFIX_H
 #define FUNCPREFIX_H
 

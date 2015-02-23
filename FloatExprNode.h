@@ -1,3 +1,9 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Expression node that manages float
+ *          types
+ ***********************************************/
 #ifndef FLOATEXPRNODE_H
 #define FLOATEXPRNODE_H
 
@@ -21,6 +27,10 @@ class FloatExprNode : public ExprNode
         DeclNode * GetType()
         {
             return symbolTableRoot->FullLookup("float")->GetType();
+        }
+        string GetName()
+        {
+            return "float";
         }
     
     private:

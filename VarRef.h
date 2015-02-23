@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Manages when a variable is referenced
+ ***********************************************/
 #ifndef VARREF_H
 #define VARREF_H
 
@@ -20,14 +25,7 @@ class VarRef : public ExprNode
             list<VarPart*>::const_iterator it = mParts.begin();
             
             for (; it != mParts.end(); it++)
-            {
-                temp += "(VarRef: " + (*it)->toString();
-                
-                //if (it != mParts.begin())
-                //    temp += ')';
-                //else if (mParts.size() > 1)
-                //    temp += '\n';
-            }
+                temp += "(VarRef: " + (*it)->toString() + ' ';
             
             for (int i = mParts.size(); i != 0; i--)
                 temp += ')';
@@ -36,10 +34,13 @@ class VarRef : public ExprNode
         }
         void AddNode(VarPart * part)
         {
-            mIsValid = CheckValidity(part);
-            if(!mIsValid)
+            mIsError = CheckValidity(part);
+            if(!mIsError)
                 mParts.push_back(part);
-            
+        }
+        string GetName()
+        {
+            return mParts.back()->GetSym()->GetName();
         }
         DeclNode * GetType()
         {
@@ -47,30 +48,24 @@ class VarRef : public ExprNode
         }
         bool CheckValidity(VarPart* symbol)
         {
-            //First check to see if the symbol is in the current symbol table
-            if (symbolTableRoot->FullLookup(symbol->GetSym()->GetName()) && symbol->GetSym()->GetDeclared())
-                return false; // No error
-            else if(mParts.size() == 0)
+            if(mParts.size() == 0)
             {
-                mErrorMsg = "Symbol " + symbol->GetSym()->GetName() + " not defined";
-                return true;
+                //std::cout << symbol->GetSym()->toString() << std::endl;
+                
+                if(!symbol->GetSym()->GetDeclared())
+                {
+                    mErrorMsg = "Symbol " + symbol->GetSym()->GetName() + " not defined";
+                    return true;
+                }
             }
             else
             {
-                StructDecl* decl = nullptr;
-                
-                //Get declnode from mSym
-                //Convert to StructDecl
-                try
-                {
-                    decl = ((StructDecl*)mParts.back()->GetType());
-                }
-                catch(int e)
-                {}
+                StructDecl* decl = dynamic_cast<StructDecl*>(mParts.back()->GetType());
                 
                 // If it was able to convert to a struct decl...
                 if (decl != nullptr)
                 {
+                    //std::cout << "Symbol: " << symbol->GetSym()->GetName() << std::endl;
                     // Find the symbol in the struct that it belongs to
                     cSymbol * sym = decl->Find(symbol->GetSym()->GetName());
                     
@@ -78,41 +73,48 @@ class VarRef : public ExprNode
                     if(sym != nullptr)
                     {
                         symbol->SetSym(sym);
-                        //mParts.back()->SetSym(sym);
                         return false; // No error
                     }
                     else // else, we didn't find the symbol in the struct, return the error
                     {
                         mErrorMsg = symbol->GetSym()->GetName() + " is not a field of ";
-                        list<VarPart*>::const_iterator it = mParts.begin();
-                        int counter = mParts.size() - 1;
-                        
-                        // Iterate through list of parts displaying them
-                        while (it != mParts.end())
-                        {
-                            mErrorMsg += (*it)->GetSym()->GetName(); // Add to the error message
-                            
-                            it++; // Move iterator to the next VarPart
-                            counter--;
-                            
-                            // If the iterator has not displayed the last Varpart
-                            // add a '.' to differentiate between the different parts
-                            if (counter != 0)
-                                mErrorMsg += '.';
-                        }
+                        CreateErrMsg("");
                         
                         return true; // Error
                     }
                 }
                 else //Else decl was not a struct decl
                 {
-                    mErrorMsg = mParts.back()->GetSym()->GetName() + " is not a struct";
+                    //mErrorMsg = mParts.back()->GetSym()->GetName() + " is not a struct";
+                    CreateErrMsg(" is not a struct");
                     return true;
                 }
             }
             
             //return true so compiler won't complain
-            return true;
+            return false;
+        }
+        void CreateErrMsg(string end)
+        {
+            list<VarPart*>::const_iterator it = mParts.begin();
+            int counter = mParts.size() - 1;
+            
+            // Iterate through list of parts displaying them
+            while (it != mParts.end())
+            {
+                mErrorMsg += (*it)->GetSym()->GetName(); // Add to the error message
+                
+                it++; // Move iterator to the next VarPart
+                
+                // If the iterator has not displayed the last Varpart
+                // add a '.' to differentiate between the different parts
+                if (counter != 0)
+                    mErrorMsg += '.';
+                    
+                counter--;
+            }
+            
+            mErrorMsg += end;
         }
         
     private:

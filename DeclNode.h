@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Abstract class for the decl nodes
+ ***********************************************/
 #ifndef DECLNODE_H
 #define DECLNODE_H
 
@@ -38,6 +43,7 @@ class DeclNode : public cAstNode
         {
             return false;
         }
+        virtual string GetName() = 0;
         virtual int GetSize() = 0;
         //bool CompatibleWith(cDeclNode *right)
         //{

@@ -1,3 +1,9 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Statement node that manages things when
+ *          print statements are made
+ ***********************************************/
 #ifndef PRINTNODE_H
 #define PRINTNODE_H
 

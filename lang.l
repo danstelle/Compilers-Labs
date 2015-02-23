@@ -45,13 +45,14 @@ junk                .
                                 if (yylval.symbol != nullptr)
                                 {
                                     if(yylval.symbol->IsType())
+                                    {
                                         RETURN(TYPE_ID);
+                                    }
                                 }
-                                else
-                                {
+                                //else
+                                //{
                                     yylval.symbol = new cSymbol(yytext);
-                                }
-                                
+                                //}
                                 RETURN(IDENTIFIER);
                             }
 

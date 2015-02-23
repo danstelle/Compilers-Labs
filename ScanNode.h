@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Statment node that manages scan calls
+ ***********************************************/
 #ifndef SCANNODE_H
 #define SCANNODE_H
 

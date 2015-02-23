@@ -1,3 +1,8 @@
+/***********************************************
+ * Author: Daniel Stelle
+ *  
+ * Purpose: Abstract base class for all StmtNodes
+ ***********************************************/
 #ifndef STMTNODE_H
 #define STMTNODE_H
 
