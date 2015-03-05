@@ -9,6 +9,7 @@
 
 #include "ExprNode.h"
 #include "cSymbol.h"
+#include "DeclNode.h"
 #include "ArrayVal.h"
 #include "ArrayDecl.h"
 
@@ -44,6 +45,14 @@ class VarPart : public ExprNode
         {
             mSym = sym;
         }
+        void SetField(DeclNode * field)
+        {
+            mField = field;
+        }
+        DeclNode * GetField()
+        {
+            return mField;
+        }
         string GetName()
         {
             return mSym->GetName();
@@ -57,6 +66,8 @@ class VarPart : public ExprNode
         }
     
     private:
+        //DeclNode * mType;
+        DeclNode * mField;
         cSymbol * mSym;
         ArrayVal * mArray;
 };

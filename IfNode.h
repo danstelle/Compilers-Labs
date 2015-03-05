@@ -28,6 +28,14 @@ class IfNode : public StmtNode
             
             return temp;
         }
+        int ComputeOffsets(int base)
+        {
+            mValue->ComputeOffsets(base);
+            mStmt1->ComputeOffsets(base);
+            mStmt2->ComputeOffsets(base);
+            
+            return base;
+        }
     
     private:
         ExprNode * mValue;

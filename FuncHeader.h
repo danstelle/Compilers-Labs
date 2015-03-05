@@ -23,13 +23,27 @@ class FuncHeader : public DeclNode
         {}
         virtual string toString()
         {
-            string temp = mPrefix->toString();
+            string temp = "(FUNC: " + mPrefix->toString();
             
             if (mParameters != nullptr)
-                temp += ' ' + mParameters->toString();
+                temp += mParameters->toString();
             else
                 temp += "()";
                 
+            temp += '\n';
+            
+            if (mDecls != nullptr)
+                temp += mDecls->toString();
+               
+            temp += '\n';
+                
+            if (mStmts != nullptr)
+                temp += mStmts->toString();
+                
+            temp += "\n size: " + std::to_string(mSize);
+            
+            temp += "\n)";
+            
             return temp;
         }
         void SetParts(DeclsNode * decls, StmtsNode * stmts)
@@ -39,14 +53,32 @@ class FuncHeader : public DeclNode
         }
         int GetSize()
         {
-            return -51;
+            return mSize;
         }
         string GetName()
         {
             return mPrefix->GetName();
         }
+        int ComputeOffsets(int base)
+        {
+            int offset = 0;
+            
+            if (mParameters != nullptr)
+                offset = mParameters->ComputeOffsets(offset);
+                
+            if (mDecls != nullptr)
+                offset = mDecls->ComputeOffsets(offset);
+                
+            if (mStmts != nullptr)
+                mStmts->ComputeOffsets(offset);
+                
+            mSize = mDecls->GetSize();
+            
+            return base;
+        }
     
     private:
+        int mSize;
         cSymbol * mPrefix;
         ParamsSpec * mParameters;
         StmtsNode * mStmts;

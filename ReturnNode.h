@@ -21,6 +21,12 @@ class ReturnNode : public StmtNode
         {
             return "RETURN: " + mValue->toString();
         }
+        int ComputeOffsets(int base)
+        {
+            mValue->ComputeOffsets(base);
+            
+            return base;
+        }
     
     private:
         ExprNode * mValue;

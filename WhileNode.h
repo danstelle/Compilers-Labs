@@ -21,6 +21,13 @@ class WhileNode : public StmtNode
         {
             return "(WHILE: " + mValue->toString() + '\n' + mStmt->toString() + "\n)";
         }
+        int ComputeOffsets(int base)
+        {
+            mValue->ComputeOffsets(base);
+            mStmt->ComputeOffsets(base);
+            
+            return base;
+        }
     
     private:
         ExprNode * mValue;

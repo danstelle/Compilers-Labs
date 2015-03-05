@@ -33,6 +33,16 @@ class ParamsSpec : public StmtNode
         {
             mParameters.push_back(parameter);
         }
+        int ComputeOffsets(int base)
+        {
+            int offset = base;
+            list<ParamSpec*>::iterator it;
+            
+            for (it = mParameters.begin(); it != mParameters.end(); it++)
+                offset = (*it)->GetDecl()->ComputeOffsets(offset);
+            
+            return offset;
+        }
     
     private:
         list<ParamSpec*> mParameters;

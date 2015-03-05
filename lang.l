@@ -49,10 +49,11 @@ junk                .
                                         RETURN(TYPE_ID);
                                     }
                                 }
-                                //else
-                                //{
+                                else
+                                {
                                     yylval.symbol = new cSymbol(yytext);
-                                //}
+                                }
+                                
                                 RETURN(IDENTIFIER);
                             }
 

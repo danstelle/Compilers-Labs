@@ -34,8 +34,21 @@ class StmtsNode : cAstNode
         {
             mStmtList.push_back(node);
         }
+        int ComputeOffsets(int base)
+        {
+            int offset = base;
+            list<StmtNode*>::iterator it;
+            
+            for (it = mStmtList.begin(); it != mStmtList.end(); it++)
+                offset = (*it)->ComputeOffsets(offset);
+                
+            mSize = offset - base;
+            
+            return offset;
+        }
     
     private:
         list<StmtNode *> mStmtList;
+        int mSize;
 };
 #endif

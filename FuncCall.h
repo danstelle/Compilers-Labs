@@ -19,7 +19,7 @@ class FuncCall : public StmtNode, public ExprNode
         {}
         virtual string toString()
         {
-            return "(FUNC CALL: " + mID->toString() + mParameters->toString() + ")\n";
+            return "(FUNC CALL: " + mID->toString() + mParameters->toString() + ")";
         }
         DeclNode * GetType()
         {
@@ -28,6 +28,12 @@ class FuncCall : public StmtNode, public ExprNode
         string GetName()
         {
             return mID->GetName();
+        }
+        int ComputeOffsets(int base)
+        {
+            mParameters->ComputeOffsets(base);
+            
+            return base;
         }
     
     private:

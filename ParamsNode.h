@@ -31,6 +31,15 @@ class ParamsNode : public StmtNode
         {
             mParameters.push_back(parameter);
         }
+        int ComputeOffsets(int base)
+        {
+            list<ParamNode*>::iterator it = mParameters.begin();
+            
+            for (; it != mParameters.end(); it++)
+                (*it)->ComputeOffsets(base);
+                
+            return base;
+        }
     
     private:
         list<ParamNode*> mParameters;

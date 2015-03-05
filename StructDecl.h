@@ -20,11 +20,12 @@ class StructDecl : public DeclNode
         {}
         virtual string toString()
         {
-            return "STRUCT: " + mDecl->toString() + ' ' + mID->toString();
+            return "STRUCT: " + mDecl->toString() + ' ' + mID->toString()
+                + " size: " + std::to_string(mSize);
         }
         int GetSize()
         {
-            return 28;
+            return mSize;
         }
         cSymbol* Find(string symbol)
         {
@@ -49,10 +50,16 @@ class StructDecl : public DeclNode
         {
             return mID->GetName();
         }
+        int ComputeOffsets(int base)
+        {
+            mSize = mDecl->ComputeOffsets(0);
+            return base;
+        }
     
     private:
         map<string, cSymbol*> * mSymbols;
         DeclsNode * mDecl;
         cSymbol * mID;
+        int mSize;
 };
 #endif

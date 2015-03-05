@@ -46,6 +46,15 @@ class AssignNode : public StmtNode
         {
             return "(ASSIGN: " + mLeft->toString() + " = " + mRight->toString() + ")";
         }
+        int ComputeOffsets(int base)
+        {
+            mLeft->ComputeOffsets(base);
+            
+            if (mRight != nullptr)
+                mRight->ComputeOffsets(base);
+            
+            return base;
+        }
         
     private:
         VarRef * mLeft;

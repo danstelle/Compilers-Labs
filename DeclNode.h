@@ -45,9 +45,5 @@ class DeclNode : public cAstNode
         }
         virtual string GetName() = 0;
         virtual int GetSize() = 0;
-        //bool CompatibleWith(cDeclNode *right)
-        //{
-            
-        //}
 };
 #endif

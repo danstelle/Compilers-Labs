@@ -18,6 +18,12 @@ class ParamNode
         {
             return mExpr->toString();
         }
+        int ComputeOffsets(int base)
+        {
+            mExpr->ComputeOffsets(base);
+            
+            return base;
+        }
     
     private:
         ExprNode * mExpr;

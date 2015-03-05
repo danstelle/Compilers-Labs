@@ -46,6 +46,13 @@ class BinaryExprNode : public ExprNode
         {
             return "";
         }
+        int ComputeOffsets(int base)
+        {
+            mExpr1->ComputeOffsets(base);
+            mExpr2->ComputeOffsets(base);
+            
+            return base;
+        }
     
     private:
         ExprNode * mExpr1;

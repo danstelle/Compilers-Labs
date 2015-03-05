@@ -20,6 +20,10 @@ class ParamSpec
         {
             return mDecl->toString();
         }
+        VarDecl * GetDecl()
+        {
+            return mDecl;
+        }
     
     private:
         VarDecl * mDecl;

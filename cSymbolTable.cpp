@@ -36,18 +36,6 @@ cSymbol * cSymbolTable::Insert(string in)
         return temp;
     }
     
-    //cSymbol * retVal;
-    // map<string,cSymbol*>::iterator it = mScope.front()->find(in);
-    
-    // if(it != mScope.front()->end())
-    //     retVal = it->second;
-    // else
-    // {
-    //     retVal = new cSymbol(in);
-    //     mScope.front()->insert(std::pair<string, cSymbol*>(in, retVal));
-    // }
-    
-    // return retVal;
 }
 
 cSymbol * cSymbolTable::Insert(cSymbol * in)
@@ -60,7 +48,10 @@ cSymbol * cSymbolTable::Insert(cSymbol * in)
     }
     else
     {
-        mScope.front()->insert(std::pair<string, cSymbol*>(in->GetName(), in));
+        if(FullLookup(in->GetName()) == in)
+            in = Insert(in->GetName());
+        else
+            mScope.front()->insert(std::pair<string, cSymbol*>(in->GetName(), in));
     }
     
     return in;
@@ -73,6 +64,7 @@ cSymbol * cSymbolTable::FullLookup(string sym)
     for(it = mScope.begin(); it != mScope.end(); ++it)
     {
         map<string,cSymbol*>::iterator symbol = (*it)->find(sym);
+        
         if(symbol != (*it)->end())
             return symbol->second;
     }

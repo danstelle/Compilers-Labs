@@ -36,8 +36,25 @@ class DeclsNode
         {
             mDecls.push_back(nn);
         }
+        int GetSize()
+        {
+            return mSize;
+        }
+        virtual int ComputeOffsets(int base)
+        {
+            int offset = base;
+            list<DeclNode*>::iterator it;
+            
+            for (it = mDecls.begin(); it != mDecls.end(); it++)
+                offset = (*it)->ComputeOffsets(offset);
+                
+            mSize = offset - base;
+            
+            return offset;
+        }
     
     private:
+        int mSize;
         list <DeclNode*> mDecls;
 };
 #endif

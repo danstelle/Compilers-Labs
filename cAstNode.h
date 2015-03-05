@@ -24,9 +24,15 @@ class cAstNode
         {
             return mErrorMsg;
         }
+        virtual int ComputeOffsets(int base)
+        {
+            return base;
+        }
         
     protected:
+        int mBase;
         bool mIsError;
         string mErrorMsg;
+        static const int WORD_SIZE = 4;
 };
 #endif

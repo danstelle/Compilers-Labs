@@ -134,9 +134,10 @@ var_decl:   TYPE_ID IDENTIFIER
                                     if (symbolTableRoot->CurLookup($2->GetName()) == nullptr)
                                     {
                                         $2 = symbolTableRoot->Insert($2);
-                                        $2->SetType($1->GetType());
+                                        //$2->SetType($1->GetType()); // Change for test 6
                                         $2->SetDeclared();
                                         $$ = new VarDecl($1, $2);
+                                        $2->SetType($$); // Change for test 6
                                     }
                                     else
                                     {
@@ -259,11 +260,8 @@ stmt:       IF '(' expr ')' stmt
         |   error ';'           {}
 
 func_call:  IDENTIFIER '(' params ')' 
-                                {
-                                    
-                                    $1 = symbolTableRoot->Insert($1);
-                                    $$ = new FuncCall($1, $3); 
-                                }
+                                { $$ = new FuncCall($1, $3); }
+                                
 varref:   varref '.' varpart    { 
                                     if ($1 == nullptr)
                                         $1 = new VarRef();
@@ -285,13 +283,7 @@ varref:   varref '.' varpart    {
                                         semantic_error($$->GetErrorMessage());
                                 }
 
-varpart:  IDENTIFIER arrayval   { 
-                                    /*if(!$1->GetDeclared())
-                                        $1 = symbolTableRoot->FullLookup($1->GetName());
-                                    else*/
-                                        $1 = symbolTableRoot->Insert($1);
-                                    $$ = new VarPart($1, $2); 
-                                }
+varpart:  IDENTIFIER arrayval   { $$ = new VarPart($1, $2); }
 
 lval:     varref                { $$ = $1; }
 

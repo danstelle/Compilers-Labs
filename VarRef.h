@@ -8,10 +8,13 @@
 
 #include "ExprNode.h"
 #include "VarPart.h"
+#include "VarDecl.h"
 #include "StructDecl.h"
 #include <string>
 
 using std::string;
+
+extern cSymbolTable* symbolTableRoot;
 
 class VarRef : public ExprNode
 {
@@ -27,14 +30,19 @@ class VarRef : public ExprNode
             for (; it != mParts.end(); it++)
                 temp += "(VarRef: " + (*it)->toString() + ' ';
             
-            for (int i = mParts.size(); i != 0; i--)
+            for (int i = mParts.size() - 1; i != 0; i--)
                 temp += ')';
+            
+            temp += "size: " + std::to_string(mSize) + " offset: " + std::to_string(mOffset);
+            
+            temp += ')';
             
             return temp;
         }
         void AddNode(VarPart * part)
         {
             mIsError = CheckValidity(part);
+            
             if(!mIsError)
                 mParts.push_back(part);
         }
@@ -50,8 +58,6 @@ class VarRef : public ExprNode
         {
             if(mParts.size() == 0)
             {
-                //std::cout << symbol->GetSym()->toString() << std::endl;
-                
                 if(!symbol->GetSym()->GetDeclared())
                 {
                     mErrorMsg = "Symbol " + symbol->GetSym()->GetName() + " not defined";
@@ -60,12 +66,12 @@ class VarRef : public ExprNode
             }
             else
             {
-                StructDecl* decl = dynamic_cast<StructDecl*>(mParts.back()->GetType());
+                VarDecl* vdecl = dynamic_cast<VarDecl*>(mParts.back()->GetType());
+                StructDecl* decl = dynamic_cast<StructDecl*>(vdecl->GetType());
                 
                 // If it was able to convert to a struct decl...
                 if (decl != nullptr)
                 {
-                    //std::cout << "Symbol: " << symbol->GetSym()->GetName() << std::endl;
                     // Find the symbol in the struct that it belongs to
                     cSymbol * sym = decl->Find(symbol->GetSym()->GetName());
                     
@@ -73,6 +79,7 @@ class VarRef : public ExprNode
                     if(sym != nullptr)
                     {
                         symbol->SetSym(sym);
+                        symbol->SetField(sym->GetType());
                         return false; // No error
                     }
                     else // else, we didn't find the symbol in the struct, return the error
@@ -116,8 +123,24 @@ class VarRef : public ExprNode
             
             mErrorMsg += end;
         }
+        int ComputeOffsets(int base)
+        {
+            //int offset = 0;
+            list<VarPart*>::iterator it = mParts.begin();
+            mOffset = dynamic_cast<VarDecl*>((*it)->GetSym()->GetType())->GetOffset();
+            
+            for (it++; it != mParts.end(); it++)
+                mOffset += dynamic_cast<VarDecl*>((*it)->GetField())->GetOffset();
+            
+            for (it = mParts.begin(); it != mParts.end(); it++)
+                mSize = dynamic_cast<VarDecl*>((*it)->GetSym()->GetType())->GetSize();
+            
+            return base;
+        }
         
     private:
+        int mOffset;
+        int mSize;
         list<VarPart*> mParts;
 };
 #endif

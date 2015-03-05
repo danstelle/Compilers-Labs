@@ -22,7 +22,7 @@ class BlockNode : public StmtNode
         {}
         virtual string toString()
         {
-            string temp = "BLOCK:\n{\n";
+            string temp = "BLOCK: size: " + std::to_string(mSize) + "\n{\n";
             
             if (mDecls != nullptr)
                 temp += mDecls->toString() + ' ' + mStmts->toString();
@@ -33,8 +33,26 @@ class BlockNode : public StmtNode
             
             return temp;
         }
+        int ComputeOffsets(int base)
+        {
+            int offset = base;
+            
+            //if (offset % WORD_SIZE != 0)
+            //    offset += WORD_SIZE - (offset % WORD_SIZE);
+            
+            if (mDecls != nullptr)
+                offset = mDecls->ComputeOffsets(offset);
+                
+            if (mStmts != nullptr)
+                offset = mStmts->ComputeOffsets(offset);
+            
+            mSize = offset - base;
+            
+            return base;
+        }
   
     private:
+        int mSize;
         DeclsNode * mDecls;
         StmtsNode * mStmts;
 };
