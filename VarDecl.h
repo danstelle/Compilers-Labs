@@ -28,6 +28,13 @@ class VarDecl : public DeclNode
         {
             return mSize;
         }
+        bool IsFloat()
+        {
+            if (mType->GetName() == "float")
+                return true;
+            else
+                return false;
+        }
         string GetName()
         {
             return mType->GetName();
@@ -36,6 +43,7 @@ class VarDecl : public DeclNode
         {
             int offset = base;
             
+            if (mType)
             if (offset % WORD_SIZE != 0)
                 offset += WORD_SIZE - (offset % WORD_SIZE);
             

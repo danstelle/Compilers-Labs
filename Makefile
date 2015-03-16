@@ -3,7 +3,8 @@ OBJS=main.o \
 	 langlex.o \
 	 cSymbol.o \
 	 cSymbolTable.o \
-	 langparse.o
+	 langparse.o \
+	 codegen.o
 
 all: lang
 

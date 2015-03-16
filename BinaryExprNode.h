@@ -17,8 +17,11 @@ class BinaryExprNode : public ExprNode
 {
     public:
         BinaryExprNode(ExprNode * expr1, char op, ExprNode * expr2)
-            : mExpr1(expr1), mExpr2(expr2), mOp(op)
-        {}
+            : mExpr1(expr1), mExpr2(expr2)
+        {
+            mOp[0] = op;
+            mOp[1] = 0;
+        }
         virtual string toString()
         {
            return "(EXPR: " + mExpr1->toString() + " " + mOp + " " + mExpr2->toString() + ")";
@@ -53,10 +56,16 @@ class BinaryExprNode : public ExprNode
             
             return base;
         }
+        void GenerateCode()
+        {
+            mExpr1->GenerateCode();
+            EmitString(mOp);
+            mExpr2->GenerateCode();
+        }
     
     private:
         ExprNode * mExpr1;
         ExprNode * mExpr2;
-        char mOp;
+        char mOp[2];
 };
 #endif

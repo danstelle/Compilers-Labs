@@ -18,6 +18,9 @@ class ExprNode : public cAstNode
         virtual string toString() = 0;
         virtual DeclNode * GetType() = 0;
         virtual string GetName() = 0;
-        //virtual int ComputeOffsets(int base) = 0;
+        virtual int GetValue()
+        {
+            return 0;
+        };
 };
 #endif

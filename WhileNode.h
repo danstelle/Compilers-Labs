@@ -28,6 +28,14 @@ class WhileNode : public StmtNode
             
             return base;
         }
+        void GenerateCode()
+        {
+            EmitString("while (");
+            mValue->GenerateCode();
+            EmitString(")\n{\n");
+            mStmt->GenerateCode();
+            EmitString("}\n");
+        }
     
     private:
         ExprNode * mValue;

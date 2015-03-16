@@ -10,6 +10,7 @@
 #include <string>
 #include "StmtNode.h"
 #include "ExprNode.h"
+#include "codegen.h"
 
 using std::string;
 
@@ -27,6 +28,23 @@ class PrintNode : public StmtNode
             mValue->ComputeOffsets(base);
             
             return base;
+        }
+        void GenerateCode()
+        {
+            if (mValue->GetType()->IsFloat())
+            {
+                EmitString("Temp_F = ");
+                mValue->GenerateCode();
+                EmitString(";\n");
+                EmitPrintTemp_F();
+            }
+            else
+            {
+                EmitString("Temp = ");
+                mValue->GenerateCode();
+                EmitString(";\n");
+                EmitPrintTemp();
+            }
         }
     
     private:

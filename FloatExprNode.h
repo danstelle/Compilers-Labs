@@ -32,6 +32,10 @@ class FloatExprNode : public ExprNode
         {
             return "float";
         }
+        void GenerateCode()
+        {
+            EmitFloat(mValue);
+        }
     
     private:
         float mValue;

@@ -137,6 +137,13 @@ class VarRef : public ExprNode
             
             return base;
         }
+        void GenerateCode()
+        {
+            if (mParts.back()->GetType()->IsFloat())
+                EmitString("(*(double *)(&Memory[(Frame_Pointer + " + std::to_string(mOffset) + ")]))");
+            else
+                EmitString("(*(int *)(&Memory[(Frame_Pointer + " + std::to_string(mOffset) + ")]))");
+        }
         
     private:
         int mOffset;

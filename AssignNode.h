@@ -55,6 +55,13 @@ class AssignNode : public StmtNode
             
             return base;
         }
+        void GenerateCode()
+        {
+            mLeft->GenerateCode();
+            EmitString(" = ");
+            mRight->GenerateCode();
+            EmitString(";\n");
+        }
         
     private:
         VarRef * mLeft;

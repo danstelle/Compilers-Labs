@@ -34,6 +34,14 @@ class IntExprNode : public ExprNode
         {
             return "int";
         }
+        void GenerateCode()
+        {
+            EmitInt(mValue);
+        }
+        int GetValue()
+        {
+            return mValue;
+        }
     
     private:
         int mValue;

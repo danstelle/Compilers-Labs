@@ -16,6 +16,8 @@ class cAstNode
 {
     public:
         virtual string toString() = 0;
+        virtual void GenerateCode()
+        {}
         virtual bool SemanticError()
         {
             return mIsError;

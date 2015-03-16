@@ -50,6 +50,14 @@ class BlockNode : public StmtNode
             
             return base;
         }
+        void GenerateCode()
+        {
+            // if (mDecls != nullptr)
+            //     mDecls->GenerateCode();
+            
+            if (mStmts != nullptr)
+                mStmts->GenerateCode();
+        }
   
     private:
         int mSize;

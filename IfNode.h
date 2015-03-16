@@ -32,9 +32,26 @@ class IfNode : public StmtNode
         {
             mValue->ComputeOffsets(base);
             mStmt1->ComputeOffsets(base);
-            mStmt2->ComputeOffsets(base);
+            
+            if (mStmt2 != nullptr)
+                mStmt2->ComputeOffsets(base);
             
             return base;
+        }
+        void GenerateCode()
+        {
+            EmitString("if (");
+            mValue->GenerateCode();
+            EmitString(")\n{\n");
+            mStmt1->GenerateCode();
+            EmitString("}\n");
+            
+            if (mStmt2 != nullptr)
+            {
+                EmitString("else\n{\n");
+                mStmt2->GenerateCode();
+                EmitString("}\n");
+            }
         }
     
     private:

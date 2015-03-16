@@ -107,6 +107,7 @@ close:  '}'                     {
                                     symbolTableRoot->DecreaseScope();
                                     $$ = NULL;
                                 }
+                                
 decls:      decls decl          {
                                     if ($1 != nullptr)
                                     {
@@ -123,14 +124,14 @@ decls:      decls decl          {
                                     $$ = new DeclsNode();
                                     $$->AddNode($1);
                                 }
+                                
 decl:       var_decl ';'        { $$ = $1; }
         |   struct_decl ';'     { $$ = $1; }
         |   func_decl           { $$ = $1; }
         |   array_decl ';'      { $$ = $1; }
         |   error ';'           { $$ = nullptr; }
         
-var_decl:   TYPE_ID IDENTIFIER   
-                                {
+var_decl:   TYPE_ID IDENTIFIER  {
                                     if (symbolTableRoot->CurLookup($2->GetName()) == nullptr)
                                     {
                                         $2 = symbolTableRoot->Insert($2);

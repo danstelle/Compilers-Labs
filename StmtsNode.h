@@ -46,6 +46,13 @@ class StmtsNode : cAstNode
             
             return offset;
         }
+        void GenerateCode()
+        {
+            list<StmtNode*>::iterator it;
+            
+            for (it = mStmtList.begin(); it != mStmtList.end(); it++)
+                (*it)->GenerateCode();
+        }
     
     private:
         list<StmtNode *> mStmtList;
