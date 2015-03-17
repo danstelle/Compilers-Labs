@@ -16,7 +16,7 @@ class StructDecl : public DeclNode
 {
     public:
         StructDecl(map<string,cSymbol*>* symTable, DeclsNode * decl, cSymbol * ID)
-            : mSymbols(symTable), mDecl(decl), mID(ID)
+            : mSymbols(symTable), mDecl(decl), mID(ID), mSize(-1)
         {}
         virtual string toString()
         {

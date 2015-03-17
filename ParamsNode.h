@@ -29,19 +29,35 @@ class ParamsNode : public StmtNode
         }
         void AddNode(ParamNode * parameter)
         {
-            mParameters.push_back(parameter);
+            if (parameter != nullptr)
+                mParameters.push_back(parameter);
+        }
+        int GetSize()
+        {
+            return mSize;
         }
         int ComputeOffsets(int base)
+        {
+            int offset = 0;
+            list<ParamNode*>::iterator it = mParameters.begin();
+            
+            for (; it != mParameters.end(); it++)
+                offset = (*it)->ComputeOffsets(offset);
+                
+            mSize = offset;
+                
+            return base;
+        }
+        void GenerateCode()
         {
             list<ParamNode*>::iterator it = mParameters.begin();
             
             for (; it != mParameters.end(); it++)
-                (*it)->ComputeOffsets(base);
-                
-            return base;
+                (*it)->GenerateCode();
         }
     
     private:
+        int mSize;
         list<ParamNode*> mParameters;
 };
 #endif

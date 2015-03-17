@@ -31,9 +31,26 @@ class FuncCall : public StmtNode, public ExprNode
         }
         int ComputeOffsets(int base)
         {
-            mParameters->ComputeOffsets(base);
+            if (mParameters != nullptr)
+                mParameters->ComputeOffsets(base);
             
             return base;
+        }
+        void GenerateCode()
+        {
+            EmitString("(*(int *)(&Memory[(Stack_Pointer)])) = Frame_Pointer;\n");
+            EmitString("Stack_Pointer += 4;\n");
+            
+            if (mParameters != nullptr)
+                mParameters->GenerateCode();
+            
+            EmitString("Frame_Pointer = Stack_Pointer - " + std::to_string(mParameters->GetSize()) + ";\n");
+                
+            EmitString(mID->GetName() + "_" + std::to_string(mID->GetSequence()) + "();\n");
+        }
+        bool IsFunc()
+        {
+            return true;
         }
     
     private:

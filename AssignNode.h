@@ -57,10 +57,24 @@ class AssignNode : public StmtNode
         }
         void GenerateCode()
         {
-            mLeft->GenerateCode();
-            EmitString(" = ");
-            mRight->GenerateCode();
-            EmitString(";\n");
+            if (mRight->IsFunc())
+            {
+                mRight->GenerateCode();
+                mLeft->GenerateCode();
+                EmitString(" = ");
+                
+                if (mRight->GetType()->IsFloat())
+                    EmitString("Temp_F;\n");
+                else
+                    EmitString("Temp;\n");
+            }
+            else
+            {
+                mLeft->GenerateCode();
+                EmitString(" = ");
+                mRight->GenerateCode();
+                EmitString(";\n");
+            }
         }
         
     private:

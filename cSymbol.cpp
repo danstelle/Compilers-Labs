@@ -11,6 +11,11 @@ cSymbol::cSymbol(string str, bool isType)
     :mSym(str), mSequence(++symbolCount), mIsType(isType)
 {}
 
+int cSymbol::GetSequence()
+{
+    return mSequence;
+}
+
 int cSymbol::GetSymCount()
 {
     return symbolCount;

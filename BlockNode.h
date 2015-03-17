@@ -12,6 +12,7 @@
 #include "StmtsNode.h"
 #include "DeclsNode.h"
 #include "cAstNode.h"
+#include "codegen.h"
 
 using std::string;
 
@@ -52,11 +53,16 @@ class BlockNode : public StmtNode
         }
         void GenerateCode()
         {
-            // if (mDecls != nullptr)
-            //     mDecls->GenerateCode();
-            
+            if (mDecls != nullptr)
+            {
+                mDecls->GenerateCode();
+                EmitString("Stack_Pointer += " + std::to_string(mSize) + ";\n");
+            }
             if (mStmts != nullptr)
                 mStmts->GenerateCode();
+                
+            if (mDecls != nullptr)
+                EmitString("Stack_Pointer -= " + std::to_string(mSize) + ";\n");
         }
   
     private:

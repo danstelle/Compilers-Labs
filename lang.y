@@ -255,6 +255,16 @@ stmt:       IF '(' expr ')' stmt
                                         $$ = nullptr;
                                     }
                                 }
+        |   lval '=' func_call ';'
+                                {
+                                    $$ = new AssignNode((VarRef*)$1, $3);
+                                    
+                                    if ($$->SemanticError())
+                                    {
+                                        semantic_error($$->GetErrorMessage());
+                                        $$ = nullptr;
+                                    }
+                                }
         |   func_call ';'       { $$ = $1; }
         |   block               { $$ = $1; }
         |   RETURN_TOK expr ';' { $$ = new ReturnNode($2); }
@@ -325,7 +335,7 @@ fact:       '(' expr ')'        { $$ = $2; }
         |   INT_VAL             { $$ = new IntExprNode($1); }
         |   FLOAT_VAL           { $$ = new FloatExprNode($1); }
         |   varref              { $$ = $1; }
-        |   func_call           { $$ = $1; }
+        //|   func_call           { $$ = $1; }
 
 %%
 

@@ -24,6 +24,17 @@ class ParamNode
             
             return base;
         }
+        void GenerateCode()
+        {
+            if (mExpr->GetType()->IsFloat())
+                EmitString("*(double*)(&Memory[Stack_Pointer]) = ");
+            else
+                EmitString("*(int*)(&Memory[Stack_Pointer]) = ");
+                
+            mExpr->GenerateCode();
+            EmitString(";\n");
+            EmitString("Stack_Pointer += 4;\n");
+        }
     
     private:
         ExprNode * mExpr;

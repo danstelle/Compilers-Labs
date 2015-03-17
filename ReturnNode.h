@@ -27,6 +27,21 @@ class ReturnNode : public StmtNode
             
             return base;
         }
+        void GenerateCode()
+        {
+            if (mValue->GetType()->IsFloat())
+            {
+                EmitString("Temp_F = ");
+                mValue->GenerateCode();
+                EmitString(";\n");
+            }
+            else
+            {
+                EmitString("Temp = ");
+                mValue->GenerateCode();
+                EmitString(";\n");
+            }
+        }
     
     private:
         ExprNode * mValue;

@@ -20,7 +20,7 @@ class BinaryExprNode : public ExprNode
             : mExpr1(expr1), mExpr2(expr2)
         {
             mOp[0] = op;
-            mOp[1] = 0;
+            mOp[1] = '\0';
         }
         virtual string toString()
         {

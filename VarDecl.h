@@ -17,7 +17,7 @@ class VarDecl : public DeclNode
 {
     public:
         VarDecl(cSymbol * type, cSymbol * sym)
-            : mType(type), mSym(sym)
+            : mType(type), mSym(sym), mSize(-1)
         {}
         virtual string toString()
         {

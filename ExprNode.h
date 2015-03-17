@@ -18,6 +18,10 @@ class ExprNode : public cAstNode
         virtual string toString() = 0;
         virtual DeclNode * GetType() = 0;
         virtual string GetName() = 0;
+        virtual bool IsFunc()
+        {
+            return false;
+        }
         virtual int GetValue()
         {
             return 0;

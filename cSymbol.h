@@ -17,6 +17,7 @@ class cSymbol
     public:
         cSymbol(string sym, bool isType = false);
         string toString();
+        int GetSequence();
         int GetSymCount();
         string GetName();
         DeclNode * GetType();

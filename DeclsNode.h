@@ -52,6 +52,13 @@ class DeclsNode
             
             return offset;
         }
+        virtual void GenerateCode()
+        {
+            list<DeclNode*>::iterator it;
+            
+            for (it = mDecls.begin(); it != mDecls.end(); it++)
+                (*it)->GenerateCode();
+        }
     
     private:
         int mSize;
